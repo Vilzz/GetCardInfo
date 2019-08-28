@@ -1,2 +1,2 @@
 # GetCardInfo
-Getting info from xml file 
+Getting info from xml file (php helper) 
