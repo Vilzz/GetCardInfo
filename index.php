@@ -24,14 +24,9 @@ if ($handle = opendir($catalog_in)){
                 echo $xml->SocCard[$i]->SNR.'<br />';
                 echo $xml->SocCard[$i]->DT_CARD.'<br />';
                 echo $xml->SocCard[$i]->SocCardCategory->CODE_L.'<br />';
-                    
-                };
+               };
              }
-            
         }
-
     } else {
         echo "Каталог ввода не найден";
     }
-    
-    ?>
