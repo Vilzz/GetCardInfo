@@ -11,10 +11,18 @@ if ($handle = opendir($catalog_in)){
             for ($i=0;$i<count($xml);$i++){
                 $pan = createPAN($xml->SocCard[$i]);
                 $chipnum = createCHIP($xml->SocCard[$i]);
-                $rs = getSeries($xml->SocCard[$i]->SocCardCategory->CODE_L);
-                $lg = '93'.$rs[0]['series'].$rs[0]['lgot_code'];
-                $line = 'P'.' '.$rs[0]['series'].' '.'0000000000'.' '.$chipnum.' '.$lg.' '.'-'.' '.'-'.' '.'-<br />';
-                echo $line;
+                
+                $cardseries = getSeries($xml->SocCard[$i]->SocCardCategory);
+
+                print_r($cardseries);
+                echo $i.'<br>';
+
+
+                //$rs = getSeries($xml->SocCard[$i]->SocCardCategory->CODE_L);
+                //$lg = '93'.$rs[0]['series'].$rs[0]['lgot_code'];
+                //$line =$i.' P'.' '.$rs[0]['series'].' '.'0000000000'.' '.$chipnum.' '.$lg.' '.'-'.' '.'-'.' '.'-<br />';
+                //$linetoscv= array('P',);
+                //echo $line;
                 // echo 'SocialCard - '.$pan.'<br />';
                 // echo 'Chip - '.$chipnum.'<br />';
                 // echo $xml->SocCard[$i]->CARD_SER.'<br />';
