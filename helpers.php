@@ -17,16 +17,17 @@
         return $result;
     }
     //Convert PAN num for necessary view format
-    function createPAN($obj){
-        $pan =  substr($obj->CARD_NUM,0,6).' '.substr($obj->CARD_NUM,6,2).' '.substr($obj->CARD_NUM,8,10).' '.substr($obj->CARD_NUM,18,1).' '.substr($obj->CARD_SER,2,2).'/'.substr($obj->CARD_SER,0,2).' '.substr($obj->CARD_SER,4,4);
+    function createPAN($card_num,$card_ser){
+        $pan =  substr($card_num,0,6).' '.substr($card_num,6,2).' '.substr($card_num,8,10).' '.substr($card_num,18,1).' '.substr($card_ser,2,2).'/'.substr($card_ser,0,2).' '.substr($card_ser,4,4);
         return $pan;
     }
     //Convert CHIP num for necessary view format
-    function createCHIP($obj){
-        $chipnum = substr($obj->SNR,6,2).substr($obj->SNR,4,2).substr($obj->SNR,2,2).substr($obj->SNR,0,2).'000000000000';
+    function createCHIP($card_snr){
+        $chipnum = substr($card_snr,6,2).substr($card_snr,4,2).substr($card_snr,2,2).substr($card_snr,0,2).'000000000000';
         return $chipnum;
     }
     
+    //Create lgot code and series to line and return as array
     function getSeries($lgotnumobj){
         if(count($lgotnumobj)>1){
             $k=0;
@@ -44,4 +45,13 @@
     else {
         return getSeriesFromDB($lgotnumobj->CODE_L[0]);
     }
+    }
+    //Create short num from pan  
+    function getNum($pan){
+        $short ='0'
+             .(substr($pan,10,2) == '00' ? '13' : substr($pan,10,2))
+             .substr($pan,8,2)
+             .substr($pan,12,2)
+             .substr($pan,15,3);
+        return $short;
     }

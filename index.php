@@ -3,34 +3,22 @@ ini_set('date.timezone', 'Europe/Samara');
 include('helpers.php'); 
 $catalog_in = "./input";
 $catalog_out = "./out";
-
+$outputfilename = 'soctrans-63-'.date('Y-m-d').'.csv';
+$outfilehandle = fopen($catalog_out.'/'.$outputfilename, "a");
 if ($handle = opendir($catalog_in)){
     while (false !== ($file = readdir($handle))){
         if ($file !== "." && $file !== "..") {
             $xml = simplexml_load_file($catalog_in.'/'.$file);
             for ($i=0;$i<count($xml);$i++){
-                $pan = createPAN($xml->SocCard[$i]);
-                $chipnum = createCHIP($xml->SocCard[$i]);
-                
+                $pan = createPAN($xml->SocCard[$i]->CARD_NUM,$xml->SocCard[$i]->CARD_SER);
+                $chipnum = createCHIP($xml->SocCard[$i]->SNR);
                 $cardseries = getSeries($xml->SocCard[$i]->SocCardCategory);
-
-                print_r($cardseries);
-                echo $i.'<br>';
-
-
-                //$rs = getSeries($xml->SocCard[$i]->SocCardCategory->CODE_L);
-                //$lg = '93'.$rs[0]['series'].$rs[0]['lgot_code'];
-                //$line =$i.' P'.' '.$rs[0]['series'].' '.'0000000000'.' '.$chipnum.' '.$lg.' '.'-'.' '.'-'.' '.'-<br />';
-                //$linetoscv= array('P',);
-                //echo $line;
-                // echo 'SocialCard - '.$pan.'<br />';
-                // echo 'Chip - '.$chipnum.'<br />';
-                // echo $xml->SocCard[$i]->CARD_SER.'<br />';
-                // echo $xml->SocCard[$i]->SNR.'<br />';
-                // echo $xml->SocCard[$i]->DT_CARD.'<br />';
-                
-                // echo $rs[0]['series'].'<br />';
-                
+                $num= getNum($xml->SocCard[$i]->CARD_NUM);         
+                $code_l = '93'.$cardseries[0]['series'].$cardseries[0]['lgot_code'];
+                $line =' P'.' '.$cardseries[0]['series'].' '.$num.' '.$chipnum.' '.$code_l.' '.$pan.'ADDED'.' '.'ON'.' '.date('Y-m-d');
+                $linetocsv= array('P',$cardseries[0]['series'],$num,$chipnum,$code_l,$pan,'ADDED','ON',date('Y-m-d'));
+                fputcsv($outfilehandle, $linetocsv,"\t");
+                print($line);echo'<br>';
                 
                };
              }
@@ -38,3 +26,4 @@ if ($handle = opendir($catalog_in)){
     } else {
         echo "Каталог ввода не найден";
     }
+fclose($outfilehandle);
