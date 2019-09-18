@@ -15,11 +15,12 @@ if ($handle = opendir($catalog_in)){
                 $cardseries = getSeries($xml->SocCard[$i]->SocCardCategory);
                 $num= getNum($xml->SocCard[$i]->CARD_NUM);         
                 $code_l = '93'.$cardseries[0]['series'].$cardseries[0]['lgot_code'];
-                $line =' P'.' '.$cardseries[0]['series'].' '.$num.' '.$chipnum.' '.$code_l.' '.$pan.'ADDED'.' '.'ON'.' '.date('Y-m-d');
-                $linetocsv= array('P',$cardseries[0]['series'],$num,$chipnum,$code_l,$pan,'ADDED','ON',date('Y-m-d'));
-                fputcsv($outfilehandle, $linetocsv,"\t");
-                print($line);echo'<br>';
-                
+                if($pan !='' && $chipnum !='' && $cardseries !='' && $num !=''){
+                    $linetocsv= array('P',$cardseries[0]['series'],$num,$chipnum,$code_l,$pan,'ADDED','ON',date('Y-m-d'));
+                    $line =$i .'- P'.' '.$cardseries[0]['series'].' '.$num.' '.$chipnum.' '.$code_l.' '.$pan.'ADDED'.' '.'ON'.' '.date('Y-m-d');
+                    fputcsv($outfilehandle, $linetocsv,"\t");
+                    print($line);echo'<br>';
+                }                
                };
              }
         }
